@@ -1,0 +1,92 @@
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: Media Monitoring API
+  description: Subscribe to keywords and receive notification when the news with this keywords will be published
+
+components:
+  schemas:
+    Settings:
+      type: object
+      properties:
+        suspended:
+          type: boolean
+          example: true
+        webhook:
+          type: string
+          format: uri
+          example: https://myserver.com/send/callback/here
+
+    SubscriptionInput:
+      type: object
+      properties:
+        keywords:
+          type: array
+          example: ['Christmas', 'Santa Claus']
+          items:
+            type: string
+    
+    Subscription:
+      allOf:
+      - type: object
+        properties:
+          id:
+            type: string
+            example: eb079fa5-d14c-4743-bdda-314032ae04ce
+      - $ref: '#/components/schemas/SubscriptionInput'
+
+paths:
+  /settings:
+    get:
+      summary: Retrieve current settings.
+      responses:
+        '200':
+          description: A settings object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+    patch:
+      summary: Update current settings.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      responses:
+        '200':
+          description: Settings updated
+  
+  /subscriptions:
+    post:
+      summary: Create a subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionInput'
+      responses:
+        '201':
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+  
+  /subscriptions/{subscriptionId}:
+    delete:
+      summary: Delete subscription
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          description: Subscription id to delete
+          schema:
+            type : string
+            example: eb079fa5-d14c-4743-bdda-314032ae04ce
+      responses:
+        '204':
+          description: Subscription deleted
