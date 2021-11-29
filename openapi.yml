@@ -120,6 +120,7 @@ paths:
 webhooks:
   newPost:
     post:
+      security: []
       summary: New mention
       description: Information about a new mention for subscribed keywords.
       requestBody:
