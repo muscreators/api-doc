@@ -1,9 +1,16 @@
 openapi: 3.1.0
 
+servers:
+  - url: https://monitoring-api.muscreators.com
+    description: Default server
+
 info:
   version: 1.0.0
   title: Media Monitoring API
   description: Subscribe to keywords and receive notification when the news with this keywords will be published
+  contact:
+    name: API Support
+    email: konstantin@muscreators.com
 
 components:
   schemas:
@@ -46,6 +53,15 @@ components:
             type: string
             example: eb079fa5-d14c-4743-bdda-314032ae04ce
       - $ref: '#/components/schemas/SubscriptionInput'
+  
+  securitySchemes:
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: X-API-KEY  # name of the header, query parameter or cookie
+
+security:
+  - ApiKeyAuth: []
 
 paths:
   /settings:
