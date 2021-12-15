@@ -41,7 +41,7 @@ components:
       properties:
         keywords:
           type: array
-          example: ['Christmas', 'Santa Claus']
+          description: Case-insensitive keywords to filter news
           items:
             type: string
     
@@ -87,6 +87,20 @@ paths:
           description: Settings updated
   
   /subscriptions:
+    get:
+      summary: List subscriptions
+      responses:
+        '200':
+          description: Active subscriptions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+              examples:
+                one keyword:
+                  value:
+                    id: eb079fa5-d14c-4743-bdda-314032ae04ce
+                    createdAt: '2021-11-11T21:20:53.074Z'
     post:
       summary: Create a subscription
       requestBody:
@@ -95,6 +109,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SubscriptionInput'
+            examples:
+              one keyword:
+                value:
+                  keywords: ['Santa Claus']
+              multiple keywords:
+                value:
+                  keywords: ['Christmas', 'Santa Claus']
       responses:
         '201':
           description: Subscription created
@@ -102,6 +123,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subscription'
+              examples:
+                one keyword: 
+                  value:
+                    id: eb079fa5-d14c-4743-bdda-314032ae04ce
+                    createdAt: '2021-11-11T21:20:53.074Z'
   
   /subscriptions/{subscriptionId}:
     delete:
